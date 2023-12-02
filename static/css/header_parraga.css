@@ -1,0 +1,25 @@
+.header {
+  /*height: 71px;*/
+  /*background-color: red;*/
+}
+
+a {
+  color: black;
+}
+
+a:link {
+  /*color: blue;*/
+}
+
+a:hover {
+  color: black;
+}
+
+a:active {
+  color: grey;
+}
+
+a:visited {
+  /*color: grey;*/
+}
+
