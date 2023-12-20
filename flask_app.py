@@ -16,6 +16,9 @@ db_path = 'Impact.db'
 # Get the user's device type and assign it to a global variable.
 @app.before_request
 def get_device_type():
+    """
+    Determines the user's device type based on the user agent and assigns it to a global variable.
+    """
     global user_device_type
     user_agent = request.user_agent.string.lower()
     if "android" in user_agent or "iphone" in user_agent or "ipad" in user_agent:
@@ -62,13 +65,13 @@ def students():
     """
     Renders the students.html template with the student data populated from the database based on the school and the current year.
     """
-    #FSU = populate_students("FSU")
-    #NCCU = populate_students("NCCU")
-    #WSSU = populate_students("WSSU")
+    # FSU = populate_students("FSU")
+    # NCCU = populate_students("NCCU")
+    # WSSU = populate_students("WSSU")
     if user_device_type == "mobile":
-        return render_template('students.html', current_year=current_year, TitleFontSize="65px") # FSU=FSU, NCCU=NCCU, WSSU=WSSU
+        return render_template('students.html', current_year=current_year, TitleFontSize="65px")  # FSU=FSU, NCCU=NCCU, WSSU=WSSU
     else:
-        return render_template('students.html', current_year=current_year, TitleFontSize="105px") # FSU=FSU, NCCU=NCCU, WSSU=WSSU
+        return render_template('students.html', current_year=current_year, TitleFontSize="105px")  # FSU=FSU, NCCU=NCCU, WSSU=WSSU
 
 
 @app.route('/admin')
@@ -81,7 +84,7 @@ def admin():
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Methods for populating data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Methods for populating data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def facultyPopulate():
     """
@@ -97,14 +100,14 @@ def facultyPopulate():
     for row in cursor.fetchall():
         faculty.append(row)
     conn.close()
-    
+
     if user_device_type == "mobile":
         width = "250px"
         height = "250px"
     else:
         width = "400px"
         height = "400px"
-    
+
     for i in range(len(faculty)):
         factultyassembled += Markup("""
             <div class="row">
@@ -117,7 +120,11 @@ def facultyPopulate():
                     <p class="teamprofiledescription"><span style="color: rgb(0, 0, 0);">Bio</span></p>
                 </div>
             </div>
-            """.replace("Name", faculty[i][1]).replace("Title", faculty[i][2]).replace("School", faculty[i][3]).replace("Email", faculty[i][4]).replace("Bio", faculty[i][5])).replace("Photo", faculty[i][6]).replace("Link", faculty[i][7]).replace("Width", width).replace("Height", height)
+            """.replace("Name", faculty[i][1]).replace("Title", faculty[i][2]).replace("School", faculty[i][3]).replace(
+            "Email", faculty[i][4]).replace("Bio", faculty[i][5])).replace("Photo", faculty[i][6]).replace("Link",
+                                                                                                        faculty[i][
+                                                                                                            7]).replace(
+            "Width", width).replace("Height", height)
 
     return factultyassembled
 
@@ -136,7 +143,7 @@ def jplPopulate():
     for row in cursor.fetchall():
         jpl.append(row)
     conn.close()
-    
+
     if user_device_type == "mobile":
         width = "250px"
         height = "250px"
@@ -156,7 +163,10 @@ def jplPopulate():
                     <p class="teamprofiledescription"><span style="color: rgb(0, 0, 0);">Bio</span></p>
                 </div>
             </div>
-            """.replace("Name", jpl[i][1]).replace("Title", jpl[i][2]).replace("School", jpl[i][3]).replace("Email", jpl[i][4]).replace("Bio", jpl[i][5])).replace("Photo", jpl[i][6]).replace("Width", width).replace("Height", height)
+            """.replace("Name", jpl[i][1]).replace("Title", jpl[i][2]).replace("School", jpl[i][3]).replace("Email",
+                                                                                                         jpl[i][
+                                                                                                             4]).replace(
+            "Bio", jpl[i][5])).replace("Photo", jpl[i][6]).replace("Width", width).replace("Height", height)
 
     return jplassembled
 
