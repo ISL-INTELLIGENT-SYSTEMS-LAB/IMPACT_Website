@@ -3,7 +3,9 @@ from markupsafe import Markup
 import sqlite3
 import datetime
 import hashlib
-import re
+import os
+from werkzeug.utils import secure_filename
+from PIL import Image
 
 # Gets the current year for the footer and sets it as a global variable. This is passed to the templates.
 current_date = datetime.date.today()
@@ -11,6 +13,10 @@ current_year = current_date.year
 
 app = Flask(__name__)
 app.secret_key = 'super secret key'
+
+upload_folder = os.path.join('static', 'images')
+ 
+app.config['UPLOAD'] = upload_folder
 
 # Path to the database file (The database used is SQLite and is stored in the same directory as the flask app).
 db_path = 'Impact.db'
@@ -103,7 +109,7 @@ def adminLogin():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        bool,modal = adminLogin(username, password)
+        bool,modal = adminLoginDef(username, password)
         if bool:
             return redirect(url_for('admin'))
         else:
@@ -134,11 +140,12 @@ def addProfile():
             email = request.form['email']
             bio = request.form['bio']
             photo = request.files['photo']
+            filename = secure_filename(photo.filename)
             link = request.form['link']
-            if photo and allowed_file(photo.filename):
-                insertFaculty(name, title, school, email, bio, photo.filename, link)
-                saveFacultyPhoto(photo, name)
-                return redirect(url_for('faculty'))
+            if photo and allowed_file(filename):
+                newFilename = saveFacultyPhoto(photo, filename)
+                insertFaculty(name, title, school, email, bio, newFilename, link)
+                return redirect(url_for('admin'))
         elif request.form['profileType'] == "jpl":
             name = request.form['name']
             title = request.form['title']
@@ -146,19 +153,72 @@ def addProfile():
             email = request.form['email']
             bio = request.form['bio']
             photo = request.files['photo']
-            if photo and allowed_file(photo.filename):
-                insertJPL(name, title, location, email, bio, photo.filename)
-                saveJPLPhoto(photo, name)
-                return redirect(url_for('jplResearchers'))
+            filename = secure_filename(photo.filename)
+            if photo and allowed_file(filename):
+                newFilename = saveJPLPhoto(photo, filename)
+                insertJPL(name, title, location, email, bio, newFilename)
+                return redirect(url_for('admin'))
+        elif request.form['profileType'] == "student":
+            name = request.form['name']
+            tier = request.form.get('tier')
+            photo = request.files['photo']
+            filename = secure_filename(photo.filename)
+            school = request.form.get('school')
+            email = request.form['email']
+            if photo and allowed_file(filename):
+                newFilename = saveStudentPhoto(photo, filename)
+                insertStudent(name, tier, newFilename, school, email)
+                return redirect(url_for('admin'))
+
+    return redirect(url_for('admin'))
+
+
+@app.route('/editProfile', methods=['GET', 'POST'])
+def editProfile():
+    """
+    Renders the edit_profile.html template and handles the form submission for editing faculty, JPL researchers, and students.
+    """
+    if request.method == 'POST':
+        if request.form['profileType'] == "faculty":
+            name = request.form['name']
+            title = request.form['title']
+            school = request.form['school']
+            email = request.form['email']
+            bio = request.form['bio']
+            photo = request.files['photo']
+            filename = secure_filename(photo.filename)
+            link = request.form['link']
+            id = request.form['id']
+            if photo and allowed_file(filename):
+                newFilename = saveFacultyPhoto(photo, filename)
+                updateFaculty(name, title, school, email, bio, newFilename, link, id)
+                return redirect(url_for('admin'))
+        elif request.form['profileType'] == "jpl":
+            name = request.form['name']
+            title = request.form['title']
+            location = request.form['location']
+            email = request.form['email']
+            bio = request.form['bio']
+            photo = request.files['photo']
+            filename = secure_filename(photo.filename)
+            id = request.form['id']
+            if photo and allowed_file(filename):
+                newFilename = saveJPLPhoto(photo, filename)
+                updateJPL(name, title, location, email, bio, newFilename, id)
+                return redirect(url_for('admin'))
         elif request.form['profileType'] == "student":
             name = request.form['name']
             tier = request.form['tier']
             photo = request.files['photo']
+            filename = secure_filename(photo.filename)
             school = request.form['school']
-            if photo and allowed_file(photo.filename):
-                insertStudent(name, tier, photo.filename, school)
-                saveStudentPhoto(photo, name)
-                return redirect(url_for('students'))
+            email = request.form['email']
+            id = request.form['id']
+            if photo and allowed_file(filename):
+                newFilename = saveStudentPhoto(photo, filename)
+                updateStudent(name, tier, newFilename, school, email, id)
+                return redirect(url_for('admin'))
+        
     return redirect(url_for('admin'))
 
 
@@ -177,27 +237,51 @@ def saveFacultyPhoto(photo, name):
     """
     Saves the faculty photo to the static/images/Faculty directory.
     """
+    photo.save(os.path.join(app.config['UPLOAD'], "Faculty", name))
+
+    # Open the image and resize it
+    photo = Image.open(os.path.join(app.config['UPLOAD'], "Faculty", name))
     photo = resizeImage(photo)
-    photo.save(f'static/images/Faculty/{name}.jpg')
+    os.remove(os.path.join(app.config['UPLOAD'], "Faculty", name))
+    name = name.split(".")[0]
+    photo.save(os.path.join(app.config['UPLOAD'], "Faculty", name+".jpg"))
+    
+    return f"{name}.jpg"
 
 
 def saveJPLPhoto(photo, name):
     """
     Saves the JPL photo to the static/images/JPL directory.
     """
+    photo.save(os.path.join(app.config['UPLOAD'], "JPL", name))
+
+    # Open the image and resize it
+    photo = Image.open(os.path.join(app.config['UPLOAD'], "JPL", name))
     photo = resizeImage(photo)
-    photo.save(f'static/images/JPL/{name}.jpg')
+    os.remove(os.path.join(app.config['UPLOAD'], "JPL", name))
+    name = name.split(".")[0]
+    photo.save(os.path.join(app.config['UPLOAD'], "JPL", name+".jpg"))
+    
+    return f"{name}.jpg"
 
 
 def saveStudentPhoto(photo, name):
     """
     Saves the student photo to the static/images/Students directory.
     """
+    photo.save(os.path.join(app.config['UPLOAD'], "Students", name))
+
+    # Open the image and resize it
+    photo = Image.open(os.path.join(app.config['UPLOAD'], "Students", name))
     photo = resizeImage(photo)
-    photo.save(f'static/images/Students/{name}.jpg')
+    os.remove(os.path.join(app.config['UPLOAD'], "Students", name))
+    name = name.split(".")[0]
+    photo.save(os.path.join(app.config['UPLOAD'], "Students", name+".jpg"))
+    
+    return f"{name}.jpg"
 
 
-def adminLogin(username, password):
+def adminLoginDef(username, password):
     """
     Logs the admin into the admin page if the username and password are correct.
     """
@@ -233,7 +317,7 @@ def populateErrorModal(message):
                                             </form>
                                     </div>
                                     <div class="modal-body">
-                                        <p>"""+ message +"""</p>
+                                        <p>Message</p>
                                     </div>
                                     <div class="modal-footer">
                                     <form>
@@ -243,7 +327,7 @@ def populateErrorModal(message):
                                 </div>
                             </div>
                         </div>
-                    """)
+                    """).replace("Message", message)
     return modal
 
 
@@ -524,7 +608,7 @@ def insertJPL(name, title, location, email, bio, photo):
     """
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO jpl (RID, name, title, school, email, bio, image) VALUES (NULL,?, ?, ?, ?, ?, ?)", (name, title, location, email, bio, photo))
+    cursor.execute("INSERT INTO jpl (RID, name, title, location, email, bio, image) VALUES (NULL,?, ?, ?, ?, ?, ?)", (name, title, location, email, bio, photo))
     conn.commit()
     conn.close()
 
@@ -535,29 +619,29 @@ def updateJPL(name, title, location, email, bio, photo, id):
     """
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute("UPDATE jpl SET name=?, title=?, school=?, email=?, bio=?, image=? WHERE id=?", (name, title, location, email, bio, photo, id))
+    cursor.execute("UPDATE jpl SET name=?, title=?, location=?, email=?, bio=?, image=? WHERE id=?", (name, title, location, email, bio, photo, id))
     conn.commit()
     conn.close()
 
 
-def insertStudent(name, tier, photo, school):
+def insertStudent(name, tier, photo, school, email):
     """
     Inserts student data into the database.
     """
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO students (SID, name, tier, image, school) VALUES (NULL,?, ?, ?, ?)", (name, tier, photo, school))
+    cursor.execute("INSERT INTO students (SID, name, student_tier, image, school, email) VALUES (NULL,?, ?, ?, ?, ?)", (name, tier, photo, school, email))
     conn.commit()
     conn.close()
 
 
-def updateStudent(name, tier, photo, school, id):
+def updateStudent(name, tier, photo, school, email, id):
     """
     Updates student data in the database.
     """
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute("UPDATE students SET name=?, tier=?, image=?, school=? WHERE id=?", (name, tier, photo, school, id))
+    cursor.execute("UPDATE students SET name=?, student_tier=?, image=?, school=?, email=? WHERE id=?", (name, tier, photo, school, email, id))
     conn.commit()
     conn.close()
 

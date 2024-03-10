@@ -12,11 +12,279 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='fonts/font-awesome.min.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fontawesome5-overrides.min.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.min.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/css/theme.bootstrap_4.min.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css')}}">
 </head>
 
 <body>
+    <div class="modal fade" role="dialog" tabindex="-1" id="Confirm_Modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirmation Needed</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this record?</p>
+                    <div class="modal-footer text-start"><button class="btn btn-danger" type="button">Yes im sure</button><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="Faculty_modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Faculty Record</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="margin-left: 5px;">
+                    <form class="custom-form">
+                        <div class="row form-group">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Title</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="pawssword-input-field" style="margin-top: 4px;">School</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Email</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="email" style="margin-top: 4px;"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Bio</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><textarea class="form-control" style="margin-top: 4px;"></textarea></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px;"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="dropdown-input-field" style="margin-top: 4px;">University Link</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="button">Save</button></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="FacultyAdd_modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Faculty</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="margin-left: 5px;">
+                    <form class="custom-form" action="/addProfile" method="POST" enctype="multipart/form-data">
+                        <div class="row form-group">
+                            <input type="hidden" name="profileType" value="faculty">
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" name="name"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Title</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" name="title"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="pawssword-input-field" style="margin-top: 4px;">School</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" name="school"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Email</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="email" style="margin-top: 4px;" name="email"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Bio</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><textarea class="form-control" style="margin-top: 4px;" name="bio"></textarea></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px;" name="photo"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="dropdown-input-field" style="margin-top: 4px;">University Link</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" name="link"></div>
+                        </div>
+                        <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="submit">Save</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="JPL_Modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit JPL Researcher Record</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="margin-left: 5px;">
+                    <form class="custom-form">
+                        <div class="row form-group">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Title</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="pawssword-input-field" style="margin-top: 4px;">Location</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Email</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="email" style="margin-top: 4px;"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Bio</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><textarea class="form-control" style="margin-top: 4px;"></textarea></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px;"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="button">Save</button></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="JPLAdd_Modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add JPL Researcher</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="margin-left: 5px;">
+                    <form class="custom-form" action="/addProfile" method="POST" enctype="multipart/form-data">
+                        <div class="row form-group">
+                            <input type="hidden" name="profileType" value="jpl">
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" name="name"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Title</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" name="title"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="pawssword-input-field" style="margin-top: 4px;">Location</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" name="location"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Email</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="email" style="margin-top: 4px;" name="email"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Bio</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><textarea class="form-control" style="margin-top: 4px;" name="bio"></textarea></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px;" name="photo"></div>
+                        </div>
+                        <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="submit">Save</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="Student_Model">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Student Record</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="margin-left: 5px;">
+                    <form class="custom-form">
+                        <div class="row form-group">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Student Tier</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><select class="form-select">
+                                    <option value="0" selected="">Freshman</option>
+                                    <option value="1">Sophomore</option>
+                                    <option value="2">Junior</option>
+                                    <option value="3">Senior</option>
+                                    <option value="4">Graduate</option>
+                                    <option value="5">Alumni</option>
+                                </select></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px;"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="dropdown-input-field" style="margin-top: 4px;">School</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text"></div>
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="dropdown-input-field" style="margin-top: 4px;">Email</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="button">Save</button></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="StudentAdd_Model">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Student</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="margin-left: 5px;">
+                    <form class="custom-form" action="/addProfile" method="POST" enctype="multipart/form-data">
+                        <div class="row form-group">
+                            <input type="hidden" name="profileType" value="student">
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" name="name"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Student Tier</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><select class="form-select" name="tier">
+                                    <option value="Freshman" selected="">Freshman</option>
+                                    <option value="Sophomore">Sophomore</option>
+                                    <option value="Junior">Junior</option>
+                                    <option value="Senior">Senior</option>
+                                    <option value="Graduate">Graduate</option>
+                                    <option value="Alumni">Alumni</option>
+                                </select></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px;" name="photo"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">School</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><select class="form-select" name="school">
+                                    <option value="FSU" selected="">Fayetteville State University</option>
+                                    <option value="NCCU">NC Central University</option>
+                                    <option value="WSSU">Winston-Salem State University</option>
+                                    <option value="Alumni">Alumni</option>
+                                </select></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="dropdown-input-field" style="margin-top: 4px;">Email</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" name="email"></div>
+                        </div>
+                        <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="submit">Save</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <div>
         <nav class="navbar navbar-expand bg-dark sb-topnav navbar-dark">
             <div class="container-fluid"><a class="navbar-brand" href="/admin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" style="font-size: 29px;margin-top: -5px;">
@@ -34,32 +302,31 @@
                     <div class="sb-sidenav-menu" style="position: fixed;">
                         <div class="nav">
                             <div>
-                                <div class="sb-sidenav-menu-heading" style="margin-top: 38px;"><span style="color: #fff;font-size: larger;">Portfolio</span></div><a class="nav-link active" href="#">
-                                    <div class="sb-nav-link-icon"><i class="fa fa-pencil-square-o"></i></div><span>Projects</span>
-                                </a><a class="nav-link active" href="#">
-                                    <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor">
+                                <div class="sb-sidenav-menu-heading" style="margin-top: 38px;"><span>Portfolio</span></div><a data-bss-disabled-mobile="true" data-bss-hover-animate="pulse" class="nav-link active" href="#">
+                                    <div class="sb-nav-link-icon"><i class="fa fa-pencil-square-o" style="font-size: 25px;"></i></div><span>Projects</span>
+                                </a><a data-bss-disabled-mobile="true" data-bss-hover-animate="pulse" class="nav-link active" href="#">
+                                    <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" style="font-size: 25px;">
                                             <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
                                             <path d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"></path>
                                         </svg></div><span>Resources</span>
-                                </a><a class="nav-link active" href="#">
-                                    <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-earmark-text">
+                                </a><a data-bss-disabled-mobile="true" data-bss-hover-animate="pulse" class="nav-link active" href="#">
+                                    <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-file-earmark-text" style="font-size: 25px;">
                                             <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"></path>
                                             <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"></path>
                                         </svg></div><span>Publications</span>
                                 </a>
-                                <div class="sb-sidenav-menu-heading"><span style="color: #fff;font-size: larger;">Personel</span></div>
-                                <a class="nav-link active" href="#faculty" onclick="facultyToggle()">
-                                    <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -32 576 576" width="1em" height="1em" fill="currentColor">
+                                <div class="sb-sidenav-menu-heading"><span>Personel</span></div><a data-bss-disabled-mobile="true" data-bss-hover-animate="pulse" class="nav-link active" href="#" onclick="facultyToggle()">
+                                    <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -32 576 576" width="1em" height="1em" fill="currentColor" style="font-size: 25px;">
                                             <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
                                             <path d="M288 0H400c8.8 0 16 7.2 16 16V80c0 8.8-7.2 16-16 16H320.7l89.6 64H512c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H336V400c0-26.5-21.5-48-48-48s-48 21.5-48 48V512H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64H165.7L256 95.5V32c0-17.7 14.3-32 32-32zm48 240a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM80 224c-8.8 0-16 7.2-16 16v64c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V240c0-8.8-7.2-16-16-16H80zm368 16v64c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V240c0-8.8-7.2-16-16-16H464c-8.8 0-16 7.2-16 16zM80 352c-8.8 0-16 7.2-16 16v64c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V368c0-8.8-7.2-16-16-16H80zm384 0c-8.8 0-16 7.2-16 16v64c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V368c0-8.8-7.2-16-16-16H464z"></path>
                                         </svg></div><span>Faculty</span>
-                                </a><a class="nav-link active" href="#jpl" onclick="jplToggle()">
-                                    <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-rocket-fill">
+                                </a><a data-bss-disabled-mobile="true" data-bss-hover-animate="pulse" class="nav-link active" href="#" onclick="jplToggle()">
+                                    <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-rocket-fill" style="font-size: 25px;">
                                             <path d="M10.175 1.991c.81 1.312 1.583 3.43 1.778 6.819l1.5 1.83A2.5 2.5 0 0 1 14 12.202V15.5a.5.5 0 0 1-.9.3l-1.125-1.5c-.166-.222-.42-.4-.752-.57-.214-.108-.414-.192-.627-.282l-.196-.083C9.7 13.793 8.85 14 8 14c-.85 0-1.7-.207-2.4-.635-.068.03-.133.057-.198.084-.211.089-.411.173-.625.281-.332.17-.586.348-.752.57L2.9 15.8a.5.5 0 0 1-.9-.3v-3.298a2.5 2.5 0 0 1 .548-1.562l.004-.005L4.049 8.81c.197-3.323.969-5.434 1.774-6.756.466-.767.94-1.262 1.31-1.57a3.67 3.67 0 0 1 .601-.41A.549.549 0 0 1 8 0c.101 0 .17.027.25.064.037.017.086.041.145.075.118.066.277.167.463.315.373.297.85.779 1.317 1.537ZM9.5 6c0-1.105-.672-2-1.5-2s-1.5.895-1.5 2S7.172 8 8 8s1.5-.895 1.5-2"></path>
                                             <path d="M8 14.5c.5 0 .999-.046 1.479-.139L8.4 15.8a.5.5 0 0 1-.8 0l-1.079-1.439c.48.093.98.139 1.479.139"></path>
                                         </svg></div><span>JPL Researchers</span>
-                                </a><a class="nav-link active" href="#students" onclick="studentToggle()">
-                                    <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -64 640 640" width="1em" height="1em" fill="currentColor">
+                                </a><a data-bss-disabled-mobile="true" data-bss-hover-animate="pulse" class="nav-link active" href="#" onclick="studentToggle()">
+                                    <div class="sb-nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -64 640 640" width="1em" height="1em" fill="currentColor" style="font-size: 25px;">
                                             <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
                                             <path d="M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3V245.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5V416c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V389.2C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112h32c24 0 46.2 7.5 64.4 20.3zM448 416V394.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176h32c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2V416c0 17.7-14.3 32-32 32H480c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3V261.7c-10 11.3-16 26.1-16 42.3zm144-42.3v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2V448c0 17.7-14.3 32-32 32H288c-17.7 0-32-14.3-32-32V405.2c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112h32c61.9 0 112 50.1 112 112z"></path>
                                         </svg></div><span>Students</span>
@@ -73,8 +340,33 @@
                 </div>
             </div>
             <div id="layoutSidenav_content" display="none">
+                <div>
                 <main style="padding-top: 25px;padding-right: 15px;padding-left: 15px;">
-                    <div id="FacultyTableDIV" style="display: none;">
+                    <div id="WelcomeDIV">
+                        <section class="py-4 py-xl-5" style="margin-top: 11%;">
+                            <div class="container h-100">
+                                <div class="row h-100">
+                                    <div class="col-md-10 col-xl-8 text-center d-flex d-sm-flex d-md-flex justify-content-center align-items-center mx-auto justify-content-md-start align-items-md-center justify-content-xl-center">
+                                        <div>
+                                            <h2 class="text-uppercase fw-bold mb-3" style="font-size: 65px;">Welcome admin!</h2>
+                                            <p class="mb-4">To make any changes to the site please select a tab on the left side menu and proceed from there.</p>
+                                            <p class="mb-4" style="font-size: 20px;">Some of the things that you can do within this admin portal are:</p>
+                                            <ul style="width: 506.891px;margin-right: auto;margin-left: auto;margin-top: -12px;">
+                                                <li style="text-align: left;">Add personnel to the database&nbsp;</li>
+                                                <li style="text-align: left;">Edit personnel data within the database</li>
+                                                <li style="text-align: left;">Delete personnel from the database</li>
+                                                <li style="text-align: left;">Add/Update/Remove projects that are currently being worked on and projects from the past</li>
+                                                <li style="text-align: left;">Add/Update/Remove Resources that have been used within our projects</li>
+                                                <li style="text-align: left;">Add/Update/Remove any publications that we may have</li>
+                                            </ul>
+                                            <ul class="list-group"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div id="FacultyTableDIV" style="display:none">
                         <div class="container-fluid" style="margin-bottom: 50px;">
                             <div class="card" id="TableSorterCard" style="border-style: none;border-radius: 6.5px;">
                                 <div class="card-header py-3" style="border-width: 0px;background: rgb(23,25,33);">
@@ -82,7 +374,7 @@
                                         <div class="col-12 col-sm-5 col-md-6 col-xxl-11 text-start" style="margin: 0px;padding: 5px 15px;">
                                             <p class="m-0 fw-bold" style="color: rgb(255,255,255);font-size: 31px;">Faculty</p>
                                         </div>
-                                        <div class="col"><button class="btn btn-primary" type="button" style="--bs-primary: #5be339;--bs-primary-rgb: 91,227,57;margin-left: 38px;">Add</button></div>
+                                        <div class="col"><button class="btn btn-success" type="button" style="--bs-primary: #5be339;--bs-primary-rgb: 91,227,57;margin-left: 38px;" data-bs-target="#FacultyAdd_modal" data-bs-toggle="modal">Add</button></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -119,7 +411,7 @@
                                         <div class="col-12 col-sm-5 col-md-6 col-xxl-11 text-start" style="margin: 0px;padding: 5px 15px;">
                                             <p class="m-0 fw-bold" style="color: rgb(255,255,255);font-size: 31px;">JPL Researchers</p>
                                         </div>
-                                        <div class="col"><button class="btn btn-primary" type="button" style="--bs-primary: #5be339;--bs-primary-rgb: 91,227,57;margin-left: 38px;">Add</button></div>
+                                        <div class="col"><button class="btn btn-success" type="button" style="--bs-primary: #5be339;--bs-primary-rgb: 91,227,57;margin-left: 38px;" data-bs-target="#JPLAdd_Modal" data-bs-toggle="modal">Add</button></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -155,7 +447,7 @@
                                         <div class="col-12 col-sm-5 col-md-6 col-xxl-11 text-start" style="margin: 0px;padding: 5px 15px;">
                                             <p class="m-0 fw-bold" style="color: rgb(255,255,255);font-size: 31px;">Students</p>
                                         </div>
-                                        <div class="col"><button class="btn btn-primary" type="button" style="--bs-primary: #5be339;--bs-primary-rgb: 91,227,57;margin-left: 38px;">Add</button></div>
+                                        <div class="col"><button class="btn btn-success" type="button" style="--bs-primary: #5be339;--bs-primary-rgb: 91,227,57;margin-left: 38px;" data-bs-target="#StudentAdd_Model" data-bs-toggle="modal">Add</button></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -188,24 +480,27 @@
     </div>
 
     <script>
-    function facultyToggle() {
-        document.getElementById("FacultyTableDIV").style.display = "block";
-        document.getElementById("JPLTableDIV").style.display = "none";
-        document.getElementById("StudentTableDIV").style.display = "none";
-    }
-
-    function jplToggle() {
-        document.getElementById("FacultyTableDIV").style.display = "none";
-        document.getElementById("JPLTableDIV").style.display = "block";
-        document.getElementById("StudentTableDIV").style.display = "none";
-    }
-
-    function studentToggle() {
-        document.getElementById("FacultyTableDIV").style.display = "none";
-        document.getElementById("JPLTableDIV").style.display = "none";
-        document.getElementById("StudentTableDIV").style.display = "block";
-    }
-    </script>
+        function facultyToggle() {
+            document.getElementById("WelcomeDIV").style.display = "none"
+            document.getElementById("FacultyTableDIV").style.display = "block";
+            document.getElementById("JPLTableDIV").style.display = "none";
+            document.getElementById("StudentTableDIV").style.display = "none";
+        }
+    
+        function jplToggle() {
+            document.getElementById("WelcomeDIV").style.display = "none"
+            document.getElementById("FacultyTableDIV").style.display = "none";
+            document.getElementById("JPLTableDIV").style.display = "block";
+            document.getElementById("StudentTableDIV").style.display = "none";
+        }
+    
+        function studentToggle() {
+            document.getElementById("WelcomeDIV").style.display = "none"
+            document.getElementById("FacultyTableDIV").style.display = "none";
+            document.getElementById("JPLTableDIV").style.display = "none";
+            document.getElementById("StudentTableDIV").style.display = "block";
+        }
+        </script>
     
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/jquery.tablesorter.js')}}"></script>
