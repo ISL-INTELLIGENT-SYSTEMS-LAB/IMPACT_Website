@@ -14,12 +14,14 @@ current_year = current_date.year
 app = Flask(__name__)
 app.secret_key = 'super secret key'
 
-upload_folder = os.path.join('static', 'images')
- 
+#/home/ImpactISL/mysite/static/images/
+upload_folder = "/home/ImpactISL/mysite/static/images/"
+
 app.config['UPLOAD'] = upload_folder
 
 # Path to the database file (The database used is SQLite and is stored in the same directory as the flask app).
-db_path = 'Impact.db'
+db_path = '/home/ImpactISL/mysite/Impact.db'
+
 
 # Get the user's device type and assign it to a global variable.
 @app.before_request
@@ -78,10 +80,11 @@ def students():
     FSU = populateStudents("FSU")
     NCCU = populateStudents("NCCU")
     WSSU = populateStudents("WSSU")
+    Alumni = populateStudents("Alumni")
     if user_device_type == "mobile":
-        return render_template('students.html', current_year=current_year, TitleFontSize="65px", FSU=FSU, NCCU=NCCU, WSSU=WSSU)
+        return render_template('students.html', current_year=current_year, TitleFontSize="65px", FSU=FSU, NCCU=NCCU, WSSU=WSSU, Alumni=Alumni)
     else:
-        return render_template('students.html', current_year=current_year, TitleFontSize="105px", FSU=FSU, NCCU=NCCU, WSSU=WSSU) 
+        return render_template('students.html', current_year=current_year, TitleFontSize="105px", FSU=FSU, NCCU=NCCU, WSSU=WSSU, Alumni=Alumni)
 
 
 @app.route('/admin')
@@ -116,7 +119,7 @@ def adminLogin():
             return render_template('adminLogin.html', current_year=current_year, modal=modal)
     else:
         return render_template('adminLogin.html', current_year=current_year)
-    
+
 
 @app.route('/adminLogout')
 def adminLogout():
@@ -143,8 +146,12 @@ def addProfile():
             filename = secure_filename(photo.filename)
             link = request.form['link']
             if photo and allowed_file(filename):
-                newFilename = saveFacultyPhoto(photo, filename)
-                insertFaculty(name, title, school, email, bio, newFilename, link)
+                saveFacultyPhoto(photo, filename)
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO faculty (FID, name, title, school, email, bio, image, link) VALUES (NULL,?,?,?,?,?,?,?)", (name, title, school, email, bio, filename, link))
+                conn.commit()
+                conn.close()
                 return redirect(url_for('admin'))
         elif request.form['profileType'] == "jpl":
             name = request.form['name']
@@ -155,8 +162,12 @@ def addProfile():
             photo = request.files['photo']
             filename = secure_filename(photo.filename)
             if photo and allowed_file(filename):
-                newFilename = saveJPLPhoto(photo, filename)
-                insertJPL(name, title, location, email, bio, newFilename)
+                saveJPLPhoto(photo, filename)
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO jpl (RID, name, title, location, email, bio, image) VALUES (NULL,?,?,?,?,?,?)", (name, title, location, email, bio, filename))
+                conn.commit()
+                conn.close()
                 return redirect(url_for('admin'))
         elif request.form['profileType'] == "student":
             name = request.form['name']
@@ -166,8 +177,12 @@ def addProfile():
             school = request.form.get('school')
             email = request.form['email']
             if photo and allowed_file(filename):
-                newFilename = saveStudentPhoto(photo, filename)
-                insertStudent(name, tier, newFilename, school, email)
+                saveStudentPhoto(photo, filename)
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO students (SID, name, student_tier, image, school, email) VALUES (NULL,?,?,?,?,?)", (name, tier, filename, school, email))
+                conn.commit()
+                conn.close()
                 return redirect(url_for('admin'))
 
     return redirect(url_for('admin'))
@@ -188,11 +203,23 @@ def editProfile():
             photo = request.files['photo']
             filename = secure_filename(photo.filename)
             link = request.form['link']
-            id = request.form['id']
+            id = request.form['facultyModalid']
             if photo and allowed_file(filename):
-                newFilename = saveFacultyPhoto(photo, filename)
-                updateFaculty(name, title, school, email, bio, newFilename, link, id)
+                saveFacultyPhoto(photo, filename)
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("UPDATE faculty SET name=?, title=?, school=?, email=?, bio=?, image=?, link=? WHERE FID=?", (name, title, school, email, bio, filename, link, id))
+                conn.commit()
+                conn.close()
                 return redirect(url_for('admin'))
+            else:
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("UPDATE faculty SET name=?, title=?, school=?, email=?, bio=?, link=? WHERE FID=?", (name, title, school, email, bio, link, id))
+                conn.commit()
+                conn.close()
+                return redirect(url_for('admin'))
+
         elif request.form['profileType'] == "jpl":
             name = request.form['name']
             title = request.form['title']
@@ -201,11 +228,23 @@ def editProfile():
             bio = request.form['bio']
             photo = request.files['photo']
             filename = secure_filename(photo.filename)
-            id = request.form['id']
+            id = request.form['jplModalid']
             if photo and allowed_file(filename):
-                newFilename = saveJPLPhoto(photo, filename)
-                updateJPL(name, title, location, email, bio, newFilename, id)
+                saveJPLPhoto(photo, filename)
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("UPDATE jpl SET name=?, title=?, location=?, email=?, bio=?, image=? WHERE RID=?", (name, title, location, email, bio, filename, id))
+                conn.commit()
+                conn.close()
                 return redirect(url_for('admin'))
+            else:
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("UPDATE jpl SET name=?, title=?, location=?, email=?, bio=? WHERE RID=?", (name, title, location, email, bio, id))
+                conn.commit()
+                conn.close()
+                return redirect(url_for('admin'))
+
         elif request.form['profileType'] == "student":
             name = request.form['name']
             tier = request.form['tier']
@@ -213,12 +252,57 @@ def editProfile():
             filename = secure_filename(photo.filename)
             school = request.form['school']
             email = request.form['email']
-            id = request.form['id']
+            id = request.form['studentModalid']
             if photo and allowed_file(filename):
-                newFilename = saveStudentPhoto(photo, filename)
-                updateStudent(name, tier, newFilename, school, email, id)
+                saveStudentPhoto(photo, filename)
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("UPDATE students SET name=?, student_tier=?, image=?, school=?, email=? WHERE SID=?", (name, tier, filename, school, email, id))
+                conn.commit()
+                conn.close()
                 return redirect(url_for('admin'))
-        
+            else:
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("UPDATE students SET name=?, student_tier=?, school=?, email=? WHERE SID=?", (name, tier, school, email, id))
+                conn.commit()
+                conn.close()
+                return redirect(url_for('admin'))
+
+    return redirect(url_for('admin'))
+
+@app.route('/deleteProfile', methods=['POST'])
+def deleteProfile():
+    """
+    Deletes a profile from the database.
+    """
+    if request.method == 'POST':
+        if request.form['deleteType'] == "faculty":
+            id = request.form['deleteModalID']
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM faculty WHERE FID=?", (id,))
+            conn.commit()
+            conn.close()
+            print()
+            return redirect(url_for('admin'))
+        elif request.form['deleteType'] == "jpl":
+            id = request.form['deleteModalID']
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM jpl WHERE RID=?", (id,))
+            conn.commit()
+            conn.close()
+            return redirect(url_for('admin'))
+        elif request.form['deleteType'] == "student":
+            id = request.form['deleteModalID']
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM students WHERE SID=?", (id,))
+            conn.commit()
+            conn.close()
+            return redirect(url_for('admin'))
+
     return redirect(url_for('admin'))
 
 
@@ -242,11 +326,7 @@ def saveFacultyPhoto(photo, name):
     # Open the image and resize it
     photo = Image.open(os.path.join(app.config['UPLOAD'], "Faculty", name))
     photo = resizeImage(photo)
-    os.remove(os.path.join(app.config['UPLOAD'], "Faculty", name))
-    name = name.split(".")[0]
-    photo.save(os.path.join(app.config['UPLOAD'], "Faculty", name+".jpg"))
-    
-    return f"{name}.jpg"
+    photo.save(os.path.join(app.config['UPLOAD'], "Faculty", name))
 
 
 def saveJPLPhoto(photo, name):
@@ -258,11 +338,8 @@ def saveJPLPhoto(photo, name):
     # Open the image and resize it
     photo = Image.open(os.path.join(app.config['UPLOAD'], "JPL", name))
     photo = resizeImage(photo)
-    os.remove(os.path.join(app.config['UPLOAD'], "JPL", name))
-    name = name.split(".")[0]
-    photo.save(os.path.join(app.config['UPLOAD'], "JPL", name+".jpg"))
-    
-    return f"{name}.jpg"
+    photo.save(os.path.join(app.config['UPLOAD'], "JPL", name))
+
 
 
 def saveStudentPhoto(photo, name):
@@ -274,11 +351,8 @@ def saveStudentPhoto(photo, name):
     # Open the image and resize it
     photo = Image.open(os.path.join(app.config['UPLOAD'], "Students", name))
     photo = resizeImage(photo)
-    os.remove(os.path.join(app.config['UPLOAD'], "Students", name))
-    name = name.split(".")[0]
-    photo.save(os.path.join(app.config['UPLOAD'], "Students", name+".jpg"))
-    
-    return f"{name}.jpg"
+    photo.save(os.path.join(app.config['UPLOAD'], "Students", name))
+
 
 
 def adminLoginDef(username, password):
@@ -396,19 +470,19 @@ def facultyPopulateTable():
             factultyassembled += Markup("""<tr style="background: #212430;">""")
 
         factultyassembled += Markup("""
-                <td style="color: var(--bs-table-color);">Name<br></td>
-                <td style="color: var(--bs-table-color);">Title</td>
-                <td style="color: var(--bs-table-color);">School</td>
-                <td style="color: var(--bs-table-color);">Email</td>
-                <td style="color: var(--bs-table-color);font-size: 10px;">Bio</td>
-                <td style="color: var(--bs-table-color);">Image</td>
-                <td style="color: var(--bs-table-color);font-size: 10px;">Link</td>
+                <td style="color: var(--bs-table-color);" id="IDfacultyname" value="Name">Name<br></td>
+                <td style="color: var(--bs-table-color);" id="IDfacultytitle" value="Title">Title</td>
+                <td style="color: var(--bs-table-color);" id="IDfacultyschool" value="School">School</td>
+                <td style="color: var(--bs-table-color);" id="IDfacultyemail" value="Email">Email</td>
+                <td style="color: var(--bs-table-color);font-size: 10px;" id="IDfacultybio" value="Bio">Bio</td>
+                <td style="color: var(--bs-table-color);" id="IDfacultyimage" value="Image">Image</td>
+                <td style="color: var(--bs-table-color);font-size: 10px;" id="IDfacultylink" value="Link">Link</td>
                 <td class="text-center align-middle" style="max-height: 60px;height: 60px;width: 100px;">
-                    <a class="btn btnMaterial btn-flat success semicircle" role="button" href="#" style="color: rgb(0,197,179);"><i class="fas fa-pen"></i></a>
-                    <a class="btn btnMaterial btn-flat accent btnNoBorders checkboxHover" role="button" style="margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#delete-modal" href="#">
+                    <a class="btn btnMaterial btn-flat success semicircle" role="button" href="#" style="color: rgb(0,197,179);" onclick="editFaculty(ID)"><i class="fas fa-pen"></i></a>
+                    <a class="btn btnMaterial btn-flat accent btnNoBorders checkboxHover" role="button" style="margin-left: 5px;" onclick="promptDelete(ID, 'faculty')"  href="#">
                         <i class="fas fa-trash btnNoBorders" style="color: #DC3545;"></i></a></td>
             </tr>
-        """.replace("Name", faculty[i][1]).replace("Title", faculty[i][2]).replace("School", faculty[i][3]).replace("Email", faculty[i][4]).replace("Bio", faculty[i][5])).replace("Image", faculty[i][6]).replace("Link", faculty[i][7])
+        """.replace("ID", str(faculty[i][0])).replace("Name", faculty[i][1]).replace("Title", faculty[i][2]).replace("School", faculty[i][3]).replace("Email", faculty[i][4]).replace("Bio", faculty[i][5])).replace("Image", faculty[i][6]).replace("Link", faculty[i][7])
         count += 1
 
     return factultyassembled
@@ -476,20 +550,20 @@ def jplPopulateTable():
             jplassembled += Markup("""<tr style="background: #212430;">""")
 
         jplassembled += Markup("""
-            <td style="color: var(--bs-table-color);">Name<br></td>
-            <td style="color: var(--bs-table-color);">Title</td>
-            <td style="color: var(--bs-table-color);">Location</td>
-            <td style="color: var(--bs-table-color);">Email</td>
-            <td style="color: var(--bs-table-color);font-size: 12px;">Bio</td>
-            <td style="color: var(--bs-table-color);">Image</td>
+            <td style="color: var(--bs-table-color);" id="IDjplname" value="Name">Name<br></td>
+            <td style="color: var(--bs-table-color);" id="IDjpltitle" value="Title">Title</td>
+            <td style="color: var(--bs-table-color);" id="IDjpllocation" value="Location">Location</td>
+            <td style="color: var(--bs-table-color);" id="IDjplemail" value="Email">Email</td>
+            <td style="color: var(--bs-table-color);font-size: 12px;" id="IDjplbio" value="Bio">Bio</td>
+            <td style="color: var(--bs-table-color);" id="IDjplImage" value="Image">Image</td>
             <td class="text-center align-middle" style="max-height: 60px;height: 60px;width: 100px;">
-                <a class="btn btnMaterial btn-flat success semicircle" role="button" href="#" style="color: rgb(0,197,179);"><i class="fas fa-pen"></i></a>
-                <a class="btn btnMaterial btn-flat accent btnNoBorders checkboxHover" role="button" style="margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#delete-modal" href="#">
+                <a class="btn btnMaterial btn-flat success semicircle" role="button" href="#" style="color: rgb(0,197,179);" onclick="editJPL(ID)"><i class="fas fa-pen"></i></a>
+                <a class="btn btnMaterial btn-flat accent btnNoBorders checkboxHover" role="button" style="margin-left: 5px;" onclick="promptDelete(ID, 'jpl')"  href="#">
                     <i class="fas fa-trash btnNoBorders" style="color: #DC3545;"></i></a></td>
         </tr>
-        """.replace("Name", jpl[i][1]).replace("Title", jpl[i][2]).replace("Location", jpl[i][3]).replace("Email", jpl[i][4]).replace("Bio", jpl[i][5])).replace("Image", jpl[i][6])
+        """.replace("ID", str(jpl[i][0])).replace("Name", jpl[i][1]).replace("Title", jpl[i][2]).replace("Location", jpl[i][3]).replace("Email", jpl[i][4]).replace("Bio", jpl[i][5])).replace("Image", jpl[i][6])
         count += 1
-    
+
     return jplassembled
 
 
@@ -534,7 +608,7 @@ def populateStudents(school):
                             </div>
                         </div>
             """.replace("Name", students[i][1]).replace("Tier", students[i][2])).replace("Photo", students[i][3]).replace("Email", students[i][5])
-    
+
     return students_assembled
 
 def populateStudentsTable():
@@ -561,89 +635,20 @@ def populateStudentsTable():
             students_assembled += Markup("""<tr style="background: #212430;">""")
 
         students_assembled += Markup("""
-            <td style="color: var(--bs-table-color);">Name<br></td>
-            <td style="color: var(--bs-table-color);">Tier</td>
-            <td style="color: var(--bs-table-color);">Image</td>
-            <td style="color: var(--bs-table-color);">School</td>
-            <td style="color: var(--bs-table-color);">Email</td>
+            <td style="color: var(--bs-table-color);" id="IDstudentname" value="Name">Name<br></td>
+            <td style="color: var(--bs-table-color);" id="IDstudenttier" value="Tier">Tier</td>
+            <td style="color: var(--bs-table-color);" id="IDstudentphoto" value="Image">Image</td>
+            <td style="color: var(--bs-table-color);" id="IDstudentschool" value="School">School</td>
+            <td style="color: var(--bs-table-color);" id="IDstudentemail" value="Email">Email</td>
             <td class="text-center align-middle" style="max-height: 60px;height: 60px;width: 100px;">
-                <a class="btn btnMaterial btn-flat success semicircle" role="button" href="#" style="color: rgb(0,197,179);"><i class="fas fa-pen"></i></a>
-                <a class="btn btnMaterial btn-flat accent btnNoBorders checkboxHover" role="button" style="margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#delete-modal" href="#">
+                <a class="btn btnMaterial btn-flat success semicircle" role="button" href="#" style="color: rgb(0,197,179);" onclick="editStudent(ID)"><i class="fas fa-pen"></i></a>
+                <a class="btn btnMaterial btn-flat accent btnNoBorders checkboxHover" role="button" style="margin-left: 5px;" onclick="promptDelete(ID, 'student')"  href="#">
                     <i class="fas fa-trash btnNoBorders" style="color: #DC3545;"></i></a></td>
         </tr>
-        """.replace("Name", students[i][1]).replace("Tier", students[i][2])).replace("Image", students[i][3]).replace("School", students[i][4]).replace("Email", students[i][5])
+        """.replace("ID", str(students[i][0])).replace("Name", students[i][1]).replace("Tier", students[i][2])).replace("Image", students[i][3]).replace("School", students[i][4]).replace("Email", students[i][5])
         count += 1
 
     return students_assembled
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Methods for inserting/updating data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def insertFaculty(name, title, school, email, bio, photo, link):
-    """
-    Inserts faculty data into the database.
-    """
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO faculty (FID, name, title, school, email, bio, image, link) VALUES (NULL,?, ?, ?, ?, ?, ?, ?)", (name, title, school, email, bio, photo, link))
-    conn.commit()
-    conn.close()
-
-
-def updateFaculty(name, title, school, email, bio, photo, link, id):
-    """
-    Updates faculty data in the database.
-    """
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute("UPDATE faculty SET name=?, title=?, school=?, email=?, bio=?, image=?, link=? WHERE id=?", (name, title, school, email, bio, photo, link, id))
-    conn.commit()
-    conn.close()
-
-
-def insertJPL(name, title, location, email, bio, photo):
-    """
-    Inserts JPL data into the database.
-    """
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO jpl (RID, name, title, location, email, bio, image) VALUES (NULL,?, ?, ?, ?, ?, ?)", (name, title, location, email, bio, photo))
-    conn.commit()
-    conn.close()
-
-
-def updateJPL(name, title, location, email, bio, photo, id):
-    """
-    Updates JPL data in the database.
-    """
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute("UPDATE jpl SET name=?, title=?, location=?, email=?, bio=?, image=? WHERE id=?", (name, title, location, email, bio, photo, id))
-    conn.commit()
-    conn.close()
-
-
-def insertStudent(name, tier, photo, school, email):
-    """
-    Inserts student data into the database.
-    """
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO students (SID, name, student_tier, image, school, email) VALUES (NULL,?, ?, ?, ?, ?)", (name, tier, photo, school, email))
-    conn.commit()
-    conn.close()
-
-
-def updateStudent(name, tier, photo, school, email, id):
-    """
-    Updates student data in the database.
-    """
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute("UPDATE students SET name=?, student_tier=?, image=?, school=?, email=? WHERE id=?", (name, tier, photo, school, email, id))
-    conn.commit()
-    conn.close()
 
 
 def createAdmin(username, password):

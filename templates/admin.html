@@ -15,64 +15,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.min.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/css/theme.bootstrap_4.min.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css')}}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-    <div class="modal fade" role="dialog" tabindex="-1" id="Confirm_Modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Confirmation Needed</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this record?</p>
-                    <div class="modal-footer text-start"><button class="btn btn-danger" type="button">Yes im sure</button><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" role="dialog" tabindex="-1" id="Faculty_modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit Faculty Record</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" style="margin-left: 5px;">
-                    <form class="custom-form">
-                        <div class="row form-group">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Title</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="pawssword-input-field" style="margin-top: 4px;">School</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Email</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="email" style="margin-top: 4px;"></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Bio</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><textarea class="form-control" style="margin-top: 4px;"></textarea></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px;"></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="dropdown-input-field" style="margin-top: 4px;">University Link</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text"></div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="button">Save</button></div>
-            </div>
-        </div>
-    </div>
     <div class="modal fade" role="dialog" tabindex="-1" id="FacultyAdd_modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -118,44 +64,6 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" role="dialog" tabindex="-1" id="JPL_Modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit JPL Researcher Record</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" style="margin-left: 5px;">
-                    <form class="custom-form">
-                        <div class="row form-group">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Title</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="pawssword-input-field" style="margin-top: 4px;">Location</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Email</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="email" style="margin-top: 4px;"></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Bio</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><textarea class="form-control" style="margin-top: 4px;"></textarea></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px;"></div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="button">Save</button></div>
-            </div>
-        </div>
-    </div>
     <div class="modal fade" role="dialog" tabindex="-1" id="JPLAdd_Modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -194,45 +102,6 @@
                         <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="submit">Save</button></div>
                     </form>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" role="dialog" tabindex="-1" id="Student_Model">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit Student Record</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" style="margin-left: 5px;">
-                    <form class="custom-form">
-                        <div class="row form-group">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;"></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Student Tier</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><select class="form-select">
-                                    <option value="0" selected="">Freshman</option>
-                                    <option value="1">Sophomore</option>
-                                    <option value="2">Junior</option>
-                                    <option value="3">Senior</option>
-                                    <option value="4">Graduate</option>
-                                    <option value="5">Alumni</option>
-                                </select></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px;"></div>
-                        </div>
-                        <div class="row form-group" style="margin-top: 4px;">
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="dropdown-input-field" style="margin-top: 4px;">School</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text"></div>
-                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="dropdown-input-field" style="margin-top: 4px;">Email</label></div>
-                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text"></div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="button">Save</button></div>
             </div>
         </div>
     </div>
@@ -343,13 +212,13 @@
                 <div>
                 <main style="padding-top: 25px;padding-right: 15px;padding-left: 15px;">
                     <div id="WelcomeDIV">
-                        <section class="py-4 py-xl-5" style="margin-top: 11%;">
+                        <section class="py-4 py-xl-5" style="margin-top: 8%;">
                             <div class="container h-100">
                                 <div class="row h-100">
                                     <div class="col-md-10 col-xl-8 text-center d-flex d-sm-flex d-md-flex justify-content-center align-items-center mx-auto justify-content-md-start align-items-md-center justify-content-xl-center">
                                         <div>
                                             <h2 class="text-uppercase fw-bold mb-3" style="font-size: 65px;">Welcome admin!</h2>
-                                            <p class="mb-4">To make any changes to the site please select a tab on the left side menu and proceed from there.</p>
+                                            <p class="mb-4"><b style="font-size: 1.5em;">For best results please maximize browser<br>To make any changes to the site please select a tab on the left side menu and proceed from there.</b></p>
                                             <p class="mb-4" style="font-size: 20px;">Some of the things that you can do within this admin portal are:</p>
                                             <ul style="width: 506.891px;margin-right: auto;margin-left: auto;margin-top: -12px;">
                                                 <li style="text-align: left;">Add personnel to the database&nbsp;</li>
@@ -478,9 +347,171 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="Confirm_Modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirmation Needed</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/deleteProfile" method="POST">
+                        <p>Are you sure you want to delete this record?</p>
+                        <input type="hidden" id="deleteType" name="deleteType" value="">
+                        <input type="hidden" id="deleteModalID" name="deleteModalID" value="">
+                        <div class="modal-footer text-start"><button class="btn btn-danger" type="submit">Yes im sure</button><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="Faculty_modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Faculty Record</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="margin-left: 5px;">
+                    <form class="custom-form" action="/editProfile" method="POST" enctype="multipart/form-data">
+                        <div class="row form-group">
+                            <input type="hidden" name="profileType" value="faculty">
+                        </div>
+                        <div class="row form-group">
+                            <input type="hidden" name="facultyModalid" value="">
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" id="facultyname" name="name"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Title</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" id="facultytitle" name="title"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="pawssword-input-field" style="margin-top: 4px;">School</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" id="facultyschool" name="school"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Email</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="email" style="margin-top: 4px;" id="facultyemail" name="email"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Bio</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><textarea class="form-control" style="margin-top: 4px; min-height: 250px;" id="facultybio" name="bio"></textarea></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px;" id="facultyimage" name="photo"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="dropdown-input-field" style="margin-top: 4px;">University Link</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" id="facultylink" name="link"></div>
+                        </div>
+                        <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="submit">Save</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="JPL_Modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit JPL Researcher Record</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="margin-left: 5px;">
+                    <form class="custom-form" action="/editProfile" method="POST" enctype="multipart/form-data">
+                        <div class="row form-group">
+                            <input type="hidden" name="profileType" value="jpl">
+                        </div>
+                        <div class="row form-group">
+                            <input type="hidden" name="jplModalid" value="">
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" name="name" id="jplname"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Title</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" name="title" id="jpltitle"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="pawssword-input-field" style="margin-top: 4px;">Location</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" name="location" id="jpllocation"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Email</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="email" style="margin-top: 4px;" name="email" id="jplemail"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Bio</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><textarea class="form-control" style="margin-top: 4px;min-height: 250px;" name="bio" id="jplbio"></textarea></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px; margin-bottom: 4px;" name="photo"></div>
+                        </div>
+                        <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="submit">Save</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="Student_Model">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Student Record</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="margin-left: 5px;">
+                    <form class="custom-form" action="/editProfile" method="POST" enctype="multipart/form-data">
+                        <div class="row form-group">
+                            <input type="hidden" name="profileType" value="student">
+                        </div>
+                        <div class="row form-group">
+                            <input type="hidden" name="studentModalid" value="">
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="name-input-field" style="margin-top: 4px;">Name </label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" style="margin-top: 4px;" name="name" id="studentname"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">Student Tier</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><select class="form-select" name="tier">
+                                    <option value="Freshman" id="Freshman">Freshman</option>
+                                    <option value="Sophomore" id="Sophomore">Sophomore</option>
+                                    <option value="Junior" id="Junior">Junior</option>
+                                    <option value="Senior" id="Senior">Senior</option>
+                                    <option value="Graduate" id="Graduate">Graduate</option>
+                                    <option value="Alumni" id="Alumni">Alumni</option>
+                                </select></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="repeat-pawssword-input-field" style="margin-top: 4px;">Image</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="file" style="margin-top: 4px;" name="photo" id="studentphoto"></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="email-input-field" style="margin-top: 4px;">School</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><select class="form-select" name="school">
+                                    <option value="FSU" id="modalFSU">Fayetteville State University</option>
+                                    <option value="NCCU" id="modalNCCU">NC Central University</option>
+                                    <option value="WSSU" id="modalWSSU">Winston-Salem State University</option>
+                                    <option value="Alumni" id="modalAlumni">Alumni</option>
+                                </select></div>
+                        </div>
+                        <div class="row form-group" style="margin-top: 4px;">
+                            <div class="col-sm-4 label-column" style="margin-top: 4px;"><label class="col-form-label" for="dropdown-input-field" style="margin-top: 4px;">Email</label></div>
+                            <div class="col-sm-6 col-xxl-8 input-column" style="margin-top: 4px;"><input class="form-control" type="text" name="email" id="studentemail"></div>
+                        </div>
+                        <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="submit">Save</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function facultyToggle() {
+            // Toggle the display of the divs to show the faculty table
             document.getElementById("WelcomeDIV").style.display = "none"
             document.getElementById("FacultyTableDIV").style.display = "block";
             document.getElementById("JPLTableDIV").style.display = "none";
@@ -488,6 +519,7 @@
         }
     
         function jplToggle() {
+            // Toggle the display of the divs to show the JPL table
             document.getElementById("WelcomeDIV").style.display = "none"
             document.getElementById("FacultyTableDIV").style.display = "none";
             document.getElementById("JPLTableDIV").style.display = "block";
@@ -495,12 +527,152 @@
         }
     
         function studentToggle() {
+            // Toggle the display of the divs to show the student table
             document.getElementById("WelcomeDIV").style.display = "none"
             document.getElementById("FacultyTableDIV").style.display = "none";
             document.getElementById("JPLTableDIV").style.display = "none";
             document.getElementById("StudentTableDIV").style.display = "block";
         }
         </script>
+        <script>
+        function promptDelete(id, type) {
+            // Set the values of the hidden fields in the modal
+            document.getElementById("deleteType").value = type;
+            document.getElementById("deleteModalID").value = id;
+            // Open the modal
+            $('#Confirm_Modal').modal('toggle');
+        }
+
+        function editFaculty(id) {
+            // Set the id field to the value of the record
+            let str = String(id);
+            document.querySelector('input[name="facultyModalid"]').value = str;
+
+            // Get the record fields from the HTML
+            const nameElement = document.getElementById(id + 'facultyname');
+            const titleElement = document.getElementById(id + 'facultytitle');
+            const schoolElement = document.getElementById(id + 'facultyschool');
+            const emailElement = document.getElementById(id + 'facultyemail');
+            const bioElement = document.getElementById(id + 'facultybio');
+            const linkElement = document.getElementById(id + 'facultylink');
+
+            // Set the name field to the value of the record
+            const name = nameElement.getAttribute('value');
+            document.getElementById("facultyname").value = name
+
+            // Set the title field to the value of the record
+            const title = titleElement.getAttribute('value');
+            document.getElementById("facultytitle").value = title
+
+            // Set the school field to the value of the record
+            const school = schoolElement.getAttribute('value');
+            document.getElementById("facultyschool").value = school
+
+            // Set the email field to the value of the record
+            const email = emailElement.getAttribute('value');
+            document.getElementById("facultyemail").value = email
+
+            // Set the bio field to the value of the record
+            const bio = bioElement.getAttribute('value');
+            document.getElementById("facultybio").value = bio
+
+            // Set the link field to the value of the record
+            const link = linkElement.getAttribute('value');
+            document.getElementById("facultylink").value = link
+
+            // Open the modal
+            $('#Faculty_modal').modal('toggle');
+        }
+
+        function editJPL(id) {
+            // Set the id field to the value of the record
+            let str = String(id);
+            document.querySelector('input[name="jplModalid"]').value = str;
+
+            // Get the record fields from the HTML
+            const nameElement = document.getElementById(id + 'jplname');
+            const titleElement = document.getElementById(id + 'jpltitle');
+            const locationElement = document.getElementById(id + 'jpllocation');
+            const emailElement = document.getElementById(id + 'jplemail');
+            const bioElement = document.getElementById(id + 'jplbio');
+
+            // Set the name field to the value of the record
+            const name = nameElement.getAttribute('value');
+            document.getElementById("jplname").value = name
+
+            // Set the title field to the value of the record
+            const title = titleElement.getAttribute('value');
+            document.getElementById("jpltitle").value = title
+
+            // Set the location field to the value of the record
+            const location = locationElement.getAttribute('value');
+            document.getElementById("jpllocation").value = location
+
+            // Set the email field to the value of the record
+            const email = emailElement.getAttribute('value');
+            document.getElementById("jplemail").value = email
+
+            // Set the bio field to the value of the record
+            const bio = bioElement.getAttribute('value');
+            document.getElementById("jplbio").value = bio
+
+            // Open the modal
+            $('#JPL_Modal').modal('toggle');
+        }
+
+        function editStudent(id) {
+            // Set the id field to the value of the record
+            let str = String(id);
+            document.querySelector('input[name="studentModalid"]').value = str;
+
+            // Get the record fields from the HTML
+            const nameElement = document.getElementById(id + 'studentname');
+            const tierElement = document.getElementById(id + 'studenttier');
+            const schoolElement = document.getElementById(id + 'studentschool');
+            const emailElement = document.getElementById(id + 'studentemail');
+
+            // Set the name field to the value of the record
+            const name = nameElement.getAttribute('value');
+            document.getElementById("studentname").value = name
+
+            // Set the tier field to the value of the record
+            const tier = tierElement.getAttribute('value');
+            if (tier === "Freshman") {
+                document.getElementById("Freshman").selected = true;
+            } else if (tier === "Sophomore") {
+                document.getElementById("Sophomore").selected = true;
+            } else if (tier === "Junior") {
+                document.getElementById("Junior").selected = true;
+            } else if (tier === "Senior") {
+                document.getElementById("Senior").selected = true;
+            } else if (tier === "Graduate") {
+                document.getElementById("Graduate").selected = true;
+            } else if (tier === "Alumni") {
+                document.getElementById("Alumni").selected = true;
+            }
+
+            // Set the school field to the value of the record
+            const school = schoolElement.getAttribute('value');
+            console.log(school)
+            if (school === "FSU") {
+                document.getElementById("modalFSU").selected = true;
+            } else if (school === "NCCU") {
+                document.getElementById("modalNCCU").selected = true;
+            } else if (school === "WSSU") {
+                document.getElementById("modalWSSU").selected = true;
+            } else if (school === "Alumni") {
+                document.getElementById("modalAlumni").selected = true;
+            }
+
+            // Set the email field to the value of the record
+            const email = emailElement.getAttribute('value');
+            document.getElementById("studentemail").value = email
+
+            // Open the modal
+            $('#Student_Model').modal('toggle');
+        }
+        </script>
+        
     
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/jquery.tablesorter.js')}}"></script>
