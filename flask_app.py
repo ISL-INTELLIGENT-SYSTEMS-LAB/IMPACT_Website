@@ -1,18 +1,25 @@
 from flask import Flask, render_template, request, redirect, session, url_for
+from werkzeug.utils import secure_filename
 from markupsafe import Markup
-import sqlite3
+from PIL import Image
 import datetime
+import sqlite3
 import hashlib
 import os
-from werkzeug.utils import secure_filename
-from PIL import Image
+
+"""
+    Author: Taylor J. Brown
+    Date: 13MAR24
+    Organization: INTELLIGENT SYSTEMS LABORATORY (ISL)
+    Project: IMPACT
+"""
 
 # Gets the current year for the footer and sets it as a global variable. This is passed to the templates.
 current_date = datetime.date.today()
 current_year = current_date.year
 
 app = Flask(__name__)
-app.secret_key = 'super secret key'
+app.secret_key = "You'll never know 😈"
 
 #/home/ImpactISL/mysite/static/images/
 upload_folder = "/home/ImpactISL/mysite/static/images/"
