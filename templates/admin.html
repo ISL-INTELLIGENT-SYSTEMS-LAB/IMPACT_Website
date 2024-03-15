@@ -553,7 +553,7 @@
             const titleElement = document.getElementById(id + 'facultytitle');
             const schoolElement = document.getElementById(id + 'facultyschool');
             const emailElement = document.getElementById(id + 'facultyemail');
-            const bioElement = document.getElementById(id + 'facultybio');
+            let bioElement = document.getElementById(id + 'facultybio');
             const linkElement = document.getElementById(id + 'facultylink');
 
             // Set the name field to the value of the record
@@ -573,8 +573,7 @@
             document.getElementById("facultyemail").value = email
 
             // Set the bio field to the value of the record
-            const bio = bioElement.getAttribute('value');
-            document.getElementById("facultybio").value = bio
+            document.getElementById("facultybio").textContent = bioElement.innerHTML
 
             // Set the link field to the value of the record
             const link = linkElement.getAttribute('value');
@@ -594,7 +593,7 @@
             const titleElement = document.getElementById(id + 'jpltitle');
             const locationElement = document.getElementById(id + 'jpllocation');
             const emailElement = document.getElementById(id + 'jplemail');
-            const bioElement = document.getElementById(id + 'jplbio');
+            let bioElement = document.getElementById(id + 'jplbio');
 
             // Set the name field to the value of the record
             const name = nameElement.getAttribute('value');
@@ -613,8 +612,7 @@
             document.getElementById("jplemail").value = email
 
             // Set the bio field to the value of the record
-            const bio = bioElement.getAttribute('value');
-            document.getElementById("jplbio").value = bio
+            document.getElementById("jplbio").textContent = bioElement.innerHTML
 
             // Open the modal
             $('#JPL_Modal').modal('toggle');
