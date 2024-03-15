@@ -481,7 +481,7 @@ def facultyPopulateTable():
                 <td style="color: var(--bs-table-color);" id="IDfacultytitle" value="Title">Title</td>
                 <td style="color: var(--bs-table-color);" id="IDfacultyschool" value="School">School</td>
                 <td style="color: var(--bs-table-color);" id="IDfacultyemail" value="Email">Email</td>
-                <td style="color: var(--bs-table-color);font-size: 10px;" id="IDfacultybio" value="Bio">Bio</td>
+                <td style="color: var(--bs-table-color);font-size: 10px;" id="IDfacultybio">Bio</td>
                 <td style="color: var(--bs-table-color);" id="IDfacultyimage" value="Image">Image</td>
                 <td style="color: var(--bs-table-color);font-size: 10px;" id="IDfacultylink" value="Link">Link</td>
                 <td class="text-center align-middle" style="max-height: 60px;height: 60px;width: 100px;">
@@ -561,7 +561,7 @@ def jplPopulateTable():
             <td style="color: var(--bs-table-color);" id="IDjpltitle" value="Title">Title</td>
             <td style="color: var(--bs-table-color);" id="IDjpllocation" value="Location">Location</td>
             <td style="color: var(--bs-table-color);" id="IDjplemail" value="Email">Email</td>
-            <td style="color: var(--bs-table-color);font-size: 12px;" id="IDjplbio" value="Bio">Bio</td>
+            <td style="color: var(--bs-table-color);font-size: 12px;" id="IDjplbio">Bio</td>
             <td style="color: var(--bs-table-color);" id="IDjplImage" value="Image">Image</td>
             <td class="text-center align-middle" style="max-height: 60px;height: 60px;width: 100px;">
                 <a class="btn btnMaterial btn-flat success semicircle" role="button" href="#" style="color: rgb(0,197,179);" onclick="editJPL(ID)"><i class="fas fa-pen"></i></a>
