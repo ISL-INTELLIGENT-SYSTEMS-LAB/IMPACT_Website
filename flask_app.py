@@ -19,7 +19,7 @@ current_date = datetime.date.today()
 current_year = current_date.year
 
 app = Flask(__name__)
-app.secret_key = "You'll never know 😈"
+app.secret_key = "QhWDpmXRTHSytDmGtvu3b8cdF0xjMAOKCyctIXtO7k61akM65a"
 
 #/home/ImpactISL/mysite/static/images/
 upload_folder = "/home/ImpactISL/mysite/static/images/"
@@ -55,16 +55,27 @@ def index():
     return render_template('index.html', current_year=current_year)
 
 
-@app.route('/faculty')
-def faculty():
+@app.route('/coi')
+def copi():
     """
     Renders the faculty.html template with the faculty data populated from the database and the current year.
     """
-    faculty = facultyPopulate()
+    faculty = facultyPopulate('copi')
     if user_device_type == "mobile":
-        return render_template('faculty.html', faculty=faculty, current_year=current_year, TitleFontSize="65px")
+        return render_template('copi.html', faculty=faculty, current_year=current_year, TitleFontSize="50px")
     else:
-        return render_template('faculty.html', faculty=faculty, current_year=current_year, TitleFontSize="105px")
+        return render_template('copi.html', faculty=faculty, current_year=current_year, TitleFontSize="105px")
+
+@app.route('/principalInvestigator')
+def principleInvestigator():
+    """
+    Renders the faculty.html template with the faculty data populated from the database and the current year.
+    """
+    faculty = facultyPopulate('pi')
+    if user_device_type == "mobile":
+        return render_template('principleInvestigator.html', faculty=faculty, current_year=current_year, TitleFontSize="50px")
+    else:
+        return render_template('principleInvestigator.html', faculty=faculty, current_year=current_year, TitleFontSize="105px")
 
 
 @app.route('/jplResearchers')
@@ -415,7 +426,7 @@ def populateErrorModal(message):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Methods for populating data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def facultyPopulate():
+def facultyPopulate(role):
     """
     Retrieves faculty data from the database and assembles the HTML markup for each faculty member.
     Returns the assembled HTML markup as a string.
@@ -423,12 +434,20 @@ def facultyPopulate():
     faculty = []
     factultyassembled = ""
 
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM faculty")
-    for row in cursor.fetchall():
-        faculty.append(row)
-    conn.close()
+    if role == 'copi':
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM faculty WHERE role LIKE 'copi'")
+        for row in cursor.fetchall():
+            faculty.append(row)
+        conn.close()
+    else:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM faculty WHERE role LIKE 'pi'")
+        for row in cursor.fetchall():
+            faculty.append(row)
+        conn.close()
 
     if user_device_type == "mobile":
         width = "250px"
